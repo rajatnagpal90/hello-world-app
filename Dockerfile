@@ -1,14 +1,16 @@
-# Use an official Java runtime as the base image
-FROM openjdk:11-jre-slim
+# Use a multi-stage build to minimize the final image size
 
-# Set the working directory
+# Stage 1: Build the application using Maven
+FROM maven:3.9.4-eclipse-temurin-17-alpine AS builder
 WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN mvn dependency:go-offline
+RUN mvn package -DskipTests
 
-# Copy the JAR file to the container
-COPY target/hello-world-app-0.0.1-SNAPSHOT.jar app.jar
-
-# Expose the application port
-EXPOSE 8080
-
-# Run the application
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Stage 2: Create the final image with a JRE
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY --from=builder /app/target/*.jar app.jar #Copy the jar
+EXPOSE 8080 #Expose the port
+CMD ["java", "-jar", "app.jar"]
