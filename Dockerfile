@@ -11,6 +11,6 @@ RUN mvn package -DskipTests
 # Stage 2: Create the final image with a JRE
 FROM eclipse-temurin:17-jre-alpine
 WORKDIR /app
-COPY --from=builder /app/target/*.jar app.jar #Copy the jar
-EXPOSE 8080 #Expose the port
+COPY --from=builder /app/target/*.jar app.jar
+EXPOSE 8080
 CMD ["java", "-jar", "app.jar"]
