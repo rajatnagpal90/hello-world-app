@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: hello-world-app
-          image: northamerica-northeast1-docker.pkg.dev/axiomatic-set-447623-d6/hello-world-repo/hello-world-image:53
+          image: northamerica-northeast1-docker.pkg.dev/axiomatic-set-447623-d6/hello-world-prod/hello-world-image:54
           ports:
             - containerPort: 8080
           resources:
