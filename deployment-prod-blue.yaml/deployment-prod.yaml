@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-app-blue
+  namespace: prod-namespace
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: hello-world-app
+      version: blue
+  template:
+    metadata:
+      labels:
+        app: hello-world-app
+        version: blue
+    spec:
+      containers:
+        - name: hello-world-app
+          image: northamerica-northeast1-docker.pkg.dev/axiomatic-set-447623-d6/hello-world-prod/hello-world-image:56  # Blue version image
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: 100m
+              memory: 200Mi
+            limits:
+              cpu: 200m
+              memory: 400Mi

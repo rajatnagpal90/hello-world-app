@@ -1,0 +1,71 @@
+# Blue Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app-blue
+  labels:
+    app: my-app
+    version: blue
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+      version: blue
+  template:
+    metadata:
+      labels:
+        app: my-app
+        version: blue
+    spec:
+      containers:
+        - name: my-app
+          image: my-app:v1
+          ports:
+            - containerPort: 8080
+
+---
+
+# Green Deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app-green
+  labels:
+    app: my-app
+    version: green
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: my-app
+      version: green
+  template:
+    metadata:
+      labels:
+        app: my-app
+        version: green
+    spec:
+      containers:
+        - name: my-app
+          image: my-app:v2
+          ports:
+            - containerPort: 8080
+
+---
+
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: my-app-service
+  labels:
+    app: my-app
+spec:
+  selector:
+    app: my-app
+    version: blue # Initially routing traffic to Blue
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
